@@ -5,9 +5,9 @@ name: Build and deploy JAR app to Azure Web App - ScheduleManagement
 
 on:
   push:
-    branches:
-      - development
-  workflow_dispatch:
+    branches: [ "development" ]
+  pull_request:
+    branches: [ "development" ]
 
 jobs:
   build:
@@ -25,13 +25,27 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean package -DskipTests
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: '${{ github.workspace }}/'
+          
+  test:
+    needs: build  # Espera a que termine `build`
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run Tests
+        run: mvn test
 
   deploy:
     runs-on: windows-latest
