@@ -1,6 +1,7 @@
 package moduloGestionUsuarios.ScheduleManagement.controller;
 
 import moduloGestionUsuarios.ScheduleManagement.DTO.IntervalDTO;
+import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Configuration;
 import moduloGestionUsuarios.ScheduleManagement.service.ConfigurationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class ConfigurationController {
     private ConfigurationServiceInterface configurationService;
 
     @PostMapping()
-    public void createConfiguration(@RequestBody Configuration configuration) {
-
+    public void createConfiguration(@RequestBody Configuration configuration) throws ScheduleManagementException {
+        configurationService.createConfiguration(configuration);
     }
 
     @DeleteMapping()

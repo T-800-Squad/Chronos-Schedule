@@ -3,7 +3,7 @@ package moduloGestionUsuarios.ScheduleManagement.model;
 
 import java.time.LocalTime;
 
-public class BreakInterval {
+public class Interval {
     private LocalTime startTime;
     private LocalTime endTime;
     private String reason;

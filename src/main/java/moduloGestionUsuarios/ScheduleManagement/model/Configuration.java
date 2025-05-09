@@ -1,5 +1,6 @@
 package moduloGestionUsuarios.ScheduleManagement.model;
 
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalTime;
@@ -8,16 +9,23 @@ import java.util.List;
 @Document("Configuration")
 public class Configuration {
     private String id;
+    private String name;
     private LocalTime startTime;
     private LocalTime endTime;
-    private List<BreakInterval> breakIntervals;
-    private List<AttentionInterval> attentionIntervals;
+    private List<Interval> breakIntervals;
+    private List<Interval> attentionIntervals;
 
     public String getId() {
         return id;
     }
     public void setId(String id) {
         this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
     public LocalTime getStartTime() {
         return startTime;
@@ -31,16 +39,16 @@ public class Configuration {
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
-    public List<BreakInterval> getBreakIntervals() {
+    public List<Interval> getBreakIntervals() {
         return breakIntervals;
     }
-    public void setBreakIntervals(List<BreakInterval> breakIntervals) {
-        this.breakIntervals = breakIntervals;
+    public void setBreakIntervals(List<Interval> intervals) {
+        this.breakIntervals = intervals;
     }
-    public List<AttentionInterval> getAttentionIntervals() {
+    public List<Interval> getAttentionIntervals() {
         return attentionIntervals;
     }
-    public void setAttentionIntervals(List<AttentionInterval> attentionIntervals) {
+    public void setAttentionIntervals(List<Interval> attentionIntervals) {
         this.attentionIntervals = attentionIntervals;
     }
 
