@@ -22,6 +22,7 @@ public class ConfigurationController {
     @PostMapping()
     public ResponseEntity<ApiResponse<String>> createConfiguration(@RequestBody Configuration configuration) throws ScheduleManagementException {
         configurationService.createConfiguration(configuration);
+
         ApiResponse<String> response = new ApiResponse<>(
                 HttpStatus.CREATED.value(),
                 "La configuracion fue creada",
@@ -31,13 +32,30 @@ public class ConfigurationController {
     }
 
     @DeleteMapping()
-    public void deleteConfiguration(@RequestParam String id) {
+    public ResponseEntity<ApiResponse<String>> deleteConfiguration(@RequestParam String id) throws ScheduleManagementException {
+        configurationService.deleteConfiguration(id);
 
+        ApiResponse<String> response = new ApiResponse<>(
+                HttpStatus.CREATED.value(),
+                "La configuracion fue eliminada",
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
     @GetMapping()
-    public List<Configuration> getConfiguration() {
-        return null;
+    public ResponseEntity<ApiResponse<List<Configuration>>> getConfiguration() throws ScheduleManagementException {
+        List<Configuration> configuraciones = configurationService.getConfiguration();
+
+        ApiResponse<List<Configuration>> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Lista de configuraciones obtenida correctamente",
+                configuraciones
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @GetMapping("/interval")
     public List<Configuration> getConfigurationInInterval(@RequestBody IntervalDTO interval) {

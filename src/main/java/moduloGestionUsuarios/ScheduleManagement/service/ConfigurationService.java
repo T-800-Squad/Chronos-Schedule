@@ -73,15 +73,21 @@ public class ConfigurationService implements ConfigurationServiceInterface {
         }
     }
 
-
-
-    public void deleteConfiguration(String id) {
-
+    public void deleteConfiguration(String id) throws ScheduleManagementException {
+        if (!configurationRepository.existsById(id)) {
+            throw new ScheduleManagementException(ScheduleManagementException.CONFIG_NOT_FOUND);
+        }
+        configurationRepository.deleteById(id);
     }
 
-    public List<Configuration> getConfiguration() {
-        return List.of();
+    public List<Configuration> getConfiguration() throws ScheduleManagementException {
+        List<Configuration> configs = configurationRepository.findAll();
+        if (configs.isEmpty()) {
+            throw new ScheduleManagementException(ScheduleManagementException.NO_CONFIGURATIONS_FOUND);
+        }
+        return configs;
     }
+
 
     public List<Configuration> getConfigurationInInterval(IntervalDTO interval) {
         return List.of();

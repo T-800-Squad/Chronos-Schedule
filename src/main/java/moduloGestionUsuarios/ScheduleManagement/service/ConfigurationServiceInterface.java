@@ -11,9 +11,9 @@ public interface ConfigurationServiceInterface {
 
     public void createConfiguration(@RequestBody Configuration configuration) throws ScheduleManagementException;
 
-    public void deleteConfiguration(@RequestParam String id);
+    public void deleteConfiguration(@RequestParam String id) throws ScheduleManagementException;
 
-    public List<Configuration> getConfiguration();
+    public List<Configuration> getConfiguration() throws ScheduleManagementException;
 
     List<Configuration> getConfigurationInInterval(@RequestBody IntervalDTO interval);
 }

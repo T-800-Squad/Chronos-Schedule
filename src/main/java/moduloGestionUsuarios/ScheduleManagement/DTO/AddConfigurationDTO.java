@@ -3,7 +3,7 @@ package moduloGestionUsuarios.ScheduleManagement.DTO;
 public class AddConfigurationDTO {
     private String serviceName;
     private String dayOfWeek;
-    private String ConfigurationId;
+    private String configurationId;
 
     public String getServiceName() {
         return serviceName;
@@ -18,9 +18,9 @@ public class AddConfigurationDTO {
         this.dayOfWeek = dayOfWeek;
     }
     public String getConfigurationId() {
-        return ConfigurationId;
+        return configurationId;
     }
     public void setConfigurationId(String configurationId) {
-        ConfigurationId = configurationId;
+        this.configurationId = configurationId;
     }
 }

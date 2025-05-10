@@ -4,6 +4,7 @@ import moduloGestionUsuarios.ScheduleManagement.DTO.AddConfigurationDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.AddServiceDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.GetScheduleDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.UpdateServiceDTO;
+import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Schedule;
 import moduloGestionUsuarios.ScheduleManagement.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +19,34 @@ public class ScheduleService implements ScheduleServiceInterface {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    public void addServiceSchedule(@RequestBody AddServiceDTO addServiceDTO) {
+    public void addServiceSchedule(AddServiceDTO addServiceDTO) {
+
+    }
+    public void deleteServiceSchedule(String serviceName) throws ScheduleManagementException {
+        if (!scheduleRepository.existsByServiceSpaceType(serviceName)) {
+            throw new ScheduleManagementException(ScheduleManagementException.SERVICE_NOT_FOUND);
+        }
+        scheduleRepository.deleteAllByServiceSpaceType(serviceName);
+    }
+
+    public void updateServiceSchedule(UpdateServiceDTO updateServiceDTO){
 
     }
 
-    public void deleteServiceSchedule(@RequestParam String serviceName) {
-
+    public void addConfigurationToSchedule(AddConfigurationDTO addConfigurationDTO) throws ScheduleManagementException {
+        Schedule schedule = scheduleRepository.findByDayOfWeekAndServiceSpaceType(addConfigurationDTO.getDayOfWeek(), addConfigurationDTO.getServiceName());
+        if (schedule == null) {
+            throw new ScheduleManagementException(ScheduleManagementException.SCHEDULE_NOT_FOUND);
+        }
+        schedule.setIdConfiguration(addConfigurationDTO.getConfigurationId());
+        scheduleRepository.save(schedule);
     }
 
-    public void updateServiceSchedule(@RequestBody UpdateServiceDTO updateServiceDTO) {
-
-    }
-
-    public void addConfigurationToSchedule(@RequestBody AddConfigurationDTO addConfigurationDTO) {
-
-    }
-
-    public List<Schedule> getSchedule(GetScheduleDTO getScheduleDTO) {
-        return null;
+    public List<Schedule> getSchedule(GetScheduleDTO getScheduleDTO) throws ScheduleManagementException {
+        List<Schedule> schedules = scheduleRepository.findAllByDayOfWeekAndServiceSpaceType(getScheduleDTO.getDayOfWeek(), getScheduleDTO.getServiceName());
+        if (schedules.isEmpty()) {
+            throw new ScheduleManagementException(ScheduleManagementException.SCHEDULE_NOT_FOUND);
+        }
+        return schedules;
     }
 }
