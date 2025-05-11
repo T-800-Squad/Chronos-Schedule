@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Schedule {
     @Id
     private String id;
-    private String ServiceSpaceType;
+    private String serviceSpaceType;
     private String responsibleUser;
     private String dayOfWeek;
     private String idConfiguration;
@@ -19,10 +19,10 @@ public class Schedule {
         this.id = id;
     }
     public String getServiceSpaceType() {
-        return ServiceSpaceType;
+        return serviceSpaceType;
     }
     public void setServiceSpaceType(String serviceSpaceType) {
-        ServiceSpaceType = serviceSpaceType;
+        this.serviceSpaceType = serviceSpaceType;
     }
     public String getResponsibleUser() {
         return responsibleUser;

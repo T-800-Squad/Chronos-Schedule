@@ -7,6 +7,11 @@ public class GetScheduleDTO {
     public GetScheduleDTO(String serviceName, String dayOfWeek) {
         this.serviceName = serviceName;
     }
+
+    public GetScheduleDTO() {
+
+    }
+
     public String getServiceName() {
         return serviceName;
     }
@@ -16,4 +21,5 @@ public class GetScheduleDTO {
     public String getDayOfWeek() {
         return dayOfWeek;
     }
+    public void setDayOfWeek(String dayOfWeek) {this.dayOfWeek = dayOfWeek;}
 }

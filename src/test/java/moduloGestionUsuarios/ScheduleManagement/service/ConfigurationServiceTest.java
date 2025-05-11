@@ -15,8 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ConfigurationServiceTest {
@@ -121,6 +120,56 @@ public class ConfigurationServiceTest {
 
         }catch (ScheduleManagementException e){
             fail();
+        }
+    }
+
+    @Test
+    public void testDeleteConfigurationNotFound() {
+        try {
+            String id = "12345";
+            Mockito.when(configurationRepository.existsById(id)).thenReturn(false);
+            configurationService.deleteConfiguration(id);
+            fail("Expected ScheduleManagementException was not thrown.");
+        } catch (ScheduleManagementException e) {
+            assertEquals(ScheduleManagementException.CONFIG_NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDeleteConfigurationSuccess() {
+        try {
+            String id = "12345";
+            Mockito.when(configurationRepository.existsById(id)).thenReturn(true);
+            Mockito.doNothing().when(configurationRepository).deleteById(id);
+            configurationService.deleteConfiguration(id);
+            Mockito.verify(configurationRepository).deleteById(id);
+        } catch (ScheduleManagementException e) {
+            fail("Unexpected ScheduleManagementException: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetConfigurationNoConfigurationsFound() {
+        try {
+            Mockito.when(configurationRepository.findAll()).thenReturn(Arrays.asList());
+            configurationService.getConfiguration();
+            fail("Expected ScheduleManagementException was not thrown.");
+        } catch (ScheduleManagementException e) {
+            assertEquals(ScheduleManagementException.NO_CONFIGURATIONS_FOUND, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetConfigurationSuccess() {
+        try {
+            Configuration configuration = new Configuration();
+            List<Configuration> configurations = Arrays.asList(configuration);
+            Mockito.when(configurationRepository.findAll()).thenReturn(configurations);
+            List<Configuration> result = configurationService.getConfiguration();
+            assertNotNull(result);
+            assertEquals(1, result.size());
+        } catch (ScheduleManagementException e) {
+            fail("Unexpected ScheduleManagementException: " + e.getMessage());
         }
     }
 
