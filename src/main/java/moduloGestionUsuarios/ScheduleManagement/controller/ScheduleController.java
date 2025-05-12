@@ -23,7 +23,14 @@ public class ScheduleController {
     private ScheduleServiceInterface scheduleService;
 
     @PostMapping()
-    public void addServiceSchedule(@RequestBody AddServiceDTO addServiceDTO) {
+    public ResponseEntity<ApiResponse<String>> addServiceSchedule(@RequestBody AddServiceDTO addServiceDTO) throws ScheduleManagementException {
+        scheduleService.addServiceSchedule(addServiceDTO);
+        ApiResponse<String> response = new ApiResponse<>(
+            HttpStatus.CREATED.value(),
+            "Horarios para el servicio creados",
+            null
+        );
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping()
@@ -39,8 +46,8 @@ public class ScheduleController {
     }
 
     @PutMapping()
-    public void updateServiceSchedule(@RequestBody UpdateServiceDTO updateServiceDTO){
-
+    public void updateServiceSchedule(@RequestBody UpdateServiceDTO updateServiceDTO) throws ScheduleManagementException {
+        scheduleService.updateServiceSchedule(updateServiceDTO);
     }
 
     @PostMapping("/configuration")

@@ -2,13 +2,13 @@ package moduloGestionUsuarios.ScheduleManagement.DTO;
 
 public class AddServiceDTO {
     private String serviceName;
-    private String serviceDescription;
+    private String responsibleUser;
 
-    public String getServiceDescription() {
-        return serviceDescription;
+    public String getResponsibleUser() {
+        return responsibleUser;
     }
-    public void setServiceDescription(String serviceDescription) {
-        this.serviceDescription = serviceDescription;
+    public void setResponsibleUser(String responsibleUser) {
+        this.responsibleUser = responsibleUser;
     }
     public String getServiceName() {
         return serviceName;

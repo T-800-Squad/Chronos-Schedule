@@ -5,17 +5,23 @@ import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementExce
 import moduloGestionUsuarios.ScheduleManagement.model.Interval;
 import moduloGestionUsuarios.ScheduleManagement.model.Configuration;
 import moduloGestionUsuarios.ScheduleManagement.repository.ConfigurationRepository;
+import moduloGestionUsuarios.ScheduleManagement.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConfigurationService implements ConfigurationServiceInterface {
 
     @Autowired
     private ConfigurationRepository configurationRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     public void createConfiguration(Configuration configuration) throws ScheduleManagementException {
         if(configurationRepository.findByName(configuration.getName()).isPresent()){
@@ -77,6 +83,9 @@ public class ConfigurationService implements ConfigurationServiceInterface {
         if (!configurationRepository.existsById(id)) {
             throw new ScheduleManagementException(ScheduleManagementException.CONFIG_NOT_FOUND);
         }
+        if(!scheduleRepository.findAllByIdConfiguration(id).isEmpty()){
+            throw new ScheduleManagementException(ScheduleManagementException.CONFIG_IN_SCHEDULE);
+        }
         configurationRepository.deleteById(id);
     }
 
@@ -89,7 +98,22 @@ public class ConfigurationService implements ConfigurationServiceInterface {
     }
 
 
-    public List<Configuration> getConfigurationInInterval(IntervalDTO interval) {
-        return List.of();
+    public List<Configuration> getConfigurationInInterval(IntervalDTO interval) throws ScheduleManagementException{
+        LocalTime startTime = LocalTime.parse(interval.getStartTime());
+        LocalTime endTime = LocalTime.parse(interval.getEndTime());
+        List<Configuration> configurations = configurationRepository.findAllByStartTimeAndEndTime(startTime,endTime);
+        if(configurations.isEmpty()){
+            throw new ScheduleManagementException(ScheduleManagementException.NOT_CONFIG_INTERVALS);
+        }
+        return configurations;
+    }
+
+    @Override
+    public Configuration getConfigurationByName(String name) throws ScheduleManagementException {
+        Optional<Configuration> configuration = configurationRepository.findByName(name);
+        if(!configuration.isPresent()){
+            throw new ScheduleManagementException(ScheduleManagementException.CONFIG_NOT_FOUND);
+        }
+        return configuration.get();
     }
 }
