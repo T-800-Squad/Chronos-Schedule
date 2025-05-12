@@ -1,5 +1,6 @@
 package moduloGestionUsuarios.ScheduleManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,7 +11,9 @@ import java.util.List;
 public class Configuration {
     private String id;
     private String name;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
     private List<Interval> breakIntervals;
     private List<Interval> attentionIntervals;

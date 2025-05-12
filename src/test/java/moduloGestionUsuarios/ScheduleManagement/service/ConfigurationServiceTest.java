@@ -127,7 +127,6 @@ public class ConfigurationServiceTest {
             fail();
         }
     }
-
     @Test
     public void testDeleteConfigurationNotFound() {
         try {

@@ -1,10 +1,14 @@
 package moduloGestionUsuarios.ScheduleManagement.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalTime;
 
 public class Interval {
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
     private String reason;
 
