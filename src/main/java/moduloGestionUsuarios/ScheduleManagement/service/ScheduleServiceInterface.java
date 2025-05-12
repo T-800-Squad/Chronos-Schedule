@@ -15,11 +15,11 @@ public interface ScheduleServiceInterface {
 
 
 
-    void addServiceSchedule(@RequestBody AddServiceDTO addServiceDTO);
+    void addServiceSchedule(@RequestBody AddServiceDTO addServiceDTO) throws ScheduleManagementException;
 
     void deleteServiceSchedule(@RequestParam String serviceName) throws ScheduleManagementException;
 
-    void updateServiceSchedule(@RequestBody UpdateServiceDTO updateServiceDTO);
+    void updateServiceSchedule(@RequestBody UpdateServiceDTO updateServiceDTO) throws ScheduleManagementException;
 
     void addConfigurationToSchedule(@RequestBody AddConfigurationDTO addConfigurationDTO)throws ScheduleManagementException;
 

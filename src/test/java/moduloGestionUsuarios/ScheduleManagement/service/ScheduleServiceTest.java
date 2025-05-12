@@ -1,7 +1,9 @@
 package moduloGestionUsuarios.ScheduleManagement.service;
 
 import moduloGestionUsuarios.ScheduleManagement.DTO.AddConfigurationDTO;
+import moduloGestionUsuarios.ScheduleManagement.DTO.AddServiceDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.GetScheduleDTO;
+import moduloGestionUsuarios.ScheduleManagement.DTO.UpdateServiceDTO;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Interval;
 import moduloGestionUsuarios.ScheduleManagement.model.Schedule;
@@ -30,6 +32,8 @@ public class ScheduleServiceTest {
 
     @MockitoBean
     private ScheduleRepository scheduleRepository;
+    @MockitoBean
+    private ConfigurationRepository configurationRepository;
 
     @Test
     public void testDeleteServiceScheduleNotFound() {
@@ -133,6 +137,79 @@ public class ScheduleServiceTest {
             assertEquals("Tuesday", result.get(0).getDayOfWeek());
         } catch (ScheduleManagementException e) {
             fail("Unexpected ScheduleManagementException: " + e.getMessage());
+        }
+    }
+    @Test
+    public void testExceptionAddServiceScheduleThatAlreadyExists() {
+        try {
+            AddServiceDTO dto = new AddServiceDTO();
+            dto.setServiceName("Cleaning");
+            dto.setResponsibleUser("admin");
+            Mockito.when(scheduleRepository.existsByServiceSpaceType("Cleaning")).thenReturn(true);
+            scheduleService.addServiceSchedule(dto);
+        } catch (ScheduleManagementException e) {
+            assertEquals("Un servicio con ese nombre ya existe", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAddServiceScheduleWithoutProblems() {
+        try {
+            AddServiceDTO dto = new AddServiceDTO();
+            dto.setServiceName("Cleaning");
+            dto.setResponsibleUser("admin");
+            Mockito.when(scheduleRepository.existsByServiceSpaceType("Cleaning")).thenReturn(false);
+            scheduleService.addServiceSchedule(dto);
+        } catch (ScheduleManagementException e) {
+            fail();
+        }
+    }
+    @Test
+    public void testExceptionUpdateServiceScheduleThatNotExists() {
+        try{
+            UpdateServiceDTO dto = new UpdateServiceDTO();
+            dto.setServiceName("Cleaning");
+            dto.setResponsibleUser("admin");
+            Mockito.when(scheduleRepository.existsByServiceSpaceType("Cleaning")).thenReturn(false);
+            scheduleService.updateServiceSchedule(dto);
+        }catch(ScheduleManagementException e){
+            assertEquals("No se encontró el servicio con el nombre proporcionado.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testExceptionUpdateServiceScheduleConfigurationNotExists() {
+        try{
+            UpdateServiceDTO dto = new UpdateServiceDTO();
+            dto.setServiceName("Cleaning");
+            dto.setResponsibleUser("admin");
+            Mockito.when(scheduleRepository.existsByServiceSpaceType("Cleaning")).thenReturn(true);
+            Mockito.when(configurationRepository.existsById(dto.getConfigurationId())).thenReturn(false);
+            scheduleService.updateServiceSchedule(dto);
+        }catch(ScheduleManagementException e){
+            assertEquals("No se encontró la configuración.", e.getMessage());
+        }
+    }
+    @Test
+    public void testUpdateServiceWithoutProblems() {
+        try{
+            UpdateServiceDTO dto = new UpdateServiceDTO();
+            dto.setServiceName("Cleaning");
+            dto.setResponsibleUser("admin");
+            dto.setConfigurationId("config123");
+            dto.setDayOfWeek("Monday");
+            Schedule schedule = new Schedule();
+            schedule.setDayOfWeek("Monday");
+            schedule.setServiceSpaceType("Cleaning");
+            schedule.setIdConfiguration("config12");
+            schedule.setResponsibleUser("x");
+            Mockito.when(configurationRepository.existsById(dto.getConfigurationId())).thenReturn(true);
+            Mockito.when(scheduleRepository.existsByServiceSpaceType("Cleaning")).thenReturn(true);
+            Mockito.when(scheduleRepository.findByDayOfWeekAndServiceSpaceType("Monday", "Cleaning")).thenReturn(schedule);
+            Mockito.when(scheduleRepository.save(schedule)).thenReturn(schedule);
+            scheduleService.updateServiceSchedule(dto);
+        }catch(ScheduleManagementException e){
+            fail();
         }
     }
 }

@@ -1,8 +1,11 @@
 package moduloGestionUsuarios.ScheduleManagement.service;
 
+import moduloGestionUsuarios.ScheduleManagement.DTO.IntervalDTO;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Interval;
+import moduloGestionUsuarios.ScheduleManagement.model.Schedule;
 import moduloGestionUsuarios.ScheduleManagement.repository.ConfigurationRepository;
+import moduloGestionUsuarios.ScheduleManagement.repository.ScheduleRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import moduloGestionUsuarios.ScheduleManagement.model.Configuration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +27,8 @@ public class ConfigurationServiceTest {
     private ConfigurationServiceInterface configurationService;
     @MockitoBean
     private ConfigurationRepository configurationRepository;
-
+    @MockitoBean
+    private ScheduleRepository scheduleRepository;
 
     @Test
     public void testCreateConfigurationNameExistException() {
@@ -141,6 +146,8 @@ public class ConfigurationServiceTest {
             String id = "12345";
             Mockito.when(configurationRepository.existsById(id)).thenReturn(true);
             Mockito.doNothing().when(configurationRepository).deleteById(id);
+            List<Schedule> schedules = new ArrayList<>();
+            Mockito.when(scheduleRepository.findAllByIdConfiguration("12345")).thenReturn(schedules);
             configurationService.deleteConfiguration(id);
             Mockito.verify(configurationRepository).deleteById(id);
         } catch (ScheduleManagementException e) {
@@ -170,6 +177,57 @@ public class ConfigurationServiceTest {
             assertEquals(1, result.size());
         } catch (ScheduleManagementException e) {
             fail("Unexpected ScheduleManagementException: " + e.getMessage());
+        }
+    }
+    @Test
+    public void testGetConfigurationInIntervalsException() {
+        try{
+            IntervalDTO intervalDTO = new IntervalDTO();
+            intervalDTO.setEndTime("07:00");
+            intervalDTO.setStartTime("04:00");
+            LocalTime startTime = LocalTime.parse("04:00");
+            LocalTime endTime = LocalTime.parse("07:00");
+            List<Configuration>configurations= new ArrayList<>();
+            Mockito.when(configurationRepository.findAllByStartTimeAndEndTime(startTime,endTime)).thenReturn(configurations);
+            configurationService.getConfigurationInInterval(intervalDTO);
+        }catch (ScheduleManagementException e){
+            assertEquals(e.getMessage(),ScheduleManagementException.NOT_CONFIG_INTERVALS);
+        }
+    }
+    @Test
+    public void testGetConfigurationInIntervalsSuccess() {
+        try{
+            IntervalDTO intervalDTO = new IntervalDTO();
+            intervalDTO.setEndTime("07:00");
+            intervalDTO.setStartTime("04:00");
+            LocalTime startTime = LocalTime.parse("04:00");
+            LocalTime endTime = LocalTime.parse("07:00");
+            Configuration configuration = new Configuration();
+            List<Configuration>configurations= new ArrayList<>();
+            configurations.add(configuration);
+            Mockito.when(configurationRepository.findAllByStartTimeAndEndTime(startTime,endTime)).thenReturn(configurations);
+            configurationService.getConfigurationInInterval(intervalDTO);
+        }catch (ScheduleManagementException e){
+            fail();
+        }
+    }
+    @Test
+    public void testGetConfigurationByNameNotFound() {
+        try{
+            Mockito.when(configurationRepository.findByName("test")).thenReturn(Optional.empty());
+            configurationService.getConfigurationByName("test");
+        }catch (ScheduleManagementException e){
+            assertEquals(ScheduleManagementException.CONFIG_NOT_FOUND, e.getMessage());
+        }
+    }
+    @Test
+    public void testGetConfigurationByNameSuccess() {
+        try{
+            Configuration configuration = new Configuration();
+            Mockito.when(configurationRepository.findByName("test")).thenReturn(Optional.of(configuration));
+            configurationService.getConfigurationByName("test");
+        }catch (ScheduleManagementException e){
+            fail();
         }
     }
 

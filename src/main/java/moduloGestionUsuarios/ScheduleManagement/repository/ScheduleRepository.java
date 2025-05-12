@@ -15,4 +15,6 @@ public interface ScheduleRepository extends MongoRepository<Schedule, String> {
     void deleteAllByServiceSpaceType(String serviceSpaceType);
 
     boolean existsByServiceSpaceType(String serviceName);
+
+    List<Schedule> findAllByIdConfiguration(String idConfiguration);
 }
