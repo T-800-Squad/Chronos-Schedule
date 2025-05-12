@@ -3,7 +3,9 @@ package moduloGestionUsuarios.ScheduleManagement.service;
 import moduloGestionUsuarios.ScheduleManagement.DTO.IntervalDTO;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Interval;
+import moduloGestionUsuarios.ScheduleManagement.model.Schedule;
 import moduloGestionUsuarios.ScheduleManagement.repository.ConfigurationRepository;
+import moduloGestionUsuarios.ScheduleManagement.repository.ScheduleRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,8 @@ public class ConfigurationServiceTest {
     private ConfigurationServiceInterface configurationService;
     @MockitoBean
     private ConfigurationRepository configurationRepository;
-
+    @MockitoBean
+    private ScheduleRepository scheduleRepository;
 
     @Test
     public void testCreateConfigurationNameExistException() {
@@ -143,6 +146,8 @@ public class ConfigurationServiceTest {
             String id = "12345";
             Mockito.when(configurationRepository.existsById(id)).thenReturn(true);
             Mockito.doNothing().when(configurationRepository).deleteById(id);
+            List<Schedule> schedules = new ArrayList<>();
+            Mockito.when(scheduleRepository.findAllByIdConfiguration("12345")).thenReturn(schedules);
             configurationService.deleteConfiguration(id);
             Mockito.verify(configurationRepository).deleteById(id);
         } catch (ScheduleManagementException e) {
