@@ -34,6 +34,7 @@ public class ConfigurationService implements ConfigurationServiceInterface {
         validateAttentionAndBreakIntervals(attentionIntervals, breaksIntervals);
         configurationRepository.save(configuration);
     }
+
     private void validateIntervals(List<Interval> attentionIntervals) throws ScheduleManagementException {
         int attentionSize = attentionIntervals.size();
         for(int i = 0; i<attentionSize; i++){

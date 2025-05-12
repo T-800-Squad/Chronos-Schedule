@@ -46,8 +46,15 @@ public class ScheduleController {
     }
 
     @PutMapping()
-    public void updateServiceSchedule(@RequestBody UpdateServiceDTO updateServiceDTO) throws ScheduleManagementException {
+    public ResponseEntity<ApiResponse<String>> updateServiceSchedule(@RequestBody UpdateServiceDTO updateServiceDTO) throws ScheduleManagementException {
         scheduleService.updateServiceSchedule(updateServiceDTO);
+        ApiResponse<String> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "El horario fue actualiado corretamente",
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     @PostMapping("/configuration")

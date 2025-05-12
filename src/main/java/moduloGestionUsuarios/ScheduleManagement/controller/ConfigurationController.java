@@ -62,7 +62,7 @@ public class ConfigurationController {
         List<Configuration> configurations = configurationService.getConfigurationInInterval(interval);
         ApiResponse<List<Configuration>> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
-                "Lista de configuraciones para el intervalo de " + interval.getStartTime() +" y" +interval.getEndTime(),
+                "Lista de configuraciones para el intervalo de " + interval.getStartTime() +" y " +interval.getEndTime(),
                 configurations
         );
         return ResponseEntity.ok(response);
