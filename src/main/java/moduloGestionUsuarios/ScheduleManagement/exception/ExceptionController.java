@@ -17,4 +17,12 @@ public class ExceptionController {
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponseException> handleUserManagementException(Exception ex) {
+        ApiResponseException response = new ApiResponseException(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }
