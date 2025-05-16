@@ -112,7 +112,16 @@ public class ConfigurationService implements ConfigurationServiceInterface {
     @Override
     public Configuration getConfigurationByName(String name) throws ScheduleManagementException {
         Optional<Configuration> configuration = configurationRepository.findByName(name);
-        if(!configuration.isPresent()){
+        if(configuration.isEmpty()){
+            throw new ScheduleManagementException(ScheduleManagementException.CONFIG_NOT_FOUND);
+        }
+        return configuration.get();
+    }
+
+    @Override
+    public Configuration getConfigurationById(String id) throws ScheduleManagementException {
+        Optional<Configuration> configuration = configurationRepository.findById(id);
+        if(configuration.isEmpty()){
             throw new ScheduleManagementException(ScheduleManagementException.CONFIG_NOT_FOUND);
         }
         return configuration.get();

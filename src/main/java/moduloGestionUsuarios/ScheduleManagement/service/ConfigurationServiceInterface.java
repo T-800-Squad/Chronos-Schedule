@@ -18,4 +18,6 @@ public interface ConfigurationServiceInterface {
     List<Configuration> getConfigurationInInterval(@RequestBody IntervalDTO interval) throws ScheduleManagementException;
 
     Configuration getConfigurationByName(@RequestParam String name) throws ScheduleManagementException;
+
+    Configuration getConfigurationById(@RequestParam String id) throws ScheduleManagementException;
 }

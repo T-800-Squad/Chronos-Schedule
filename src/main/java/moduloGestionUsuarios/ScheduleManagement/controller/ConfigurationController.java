@@ -78,4 +78,15 @@ public class ConfigurationController {
         );
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/id")
+    public ResponseEntity<ApiResponse<Configuration>> getConfigurationById(@RequestParam String id) throws ScheduleManagementException {
+        Configuration configuration = configurationService.getConfigurationById(id);
+        ApiResponse<Configuration> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Configuracion encontrada",
+                configuration
+        );
+        return ResponseEntity.ok(response);
+    }
 }
