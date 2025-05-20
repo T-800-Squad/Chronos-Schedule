@@ -33,7 +33,14 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
         String path = request.getRequestURI();
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS,DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
         // Excluir las rutas de Swagger de la validación.
         List<String> openPaths = Arrays.asList(
                 "/swagger-ui/index.html",
