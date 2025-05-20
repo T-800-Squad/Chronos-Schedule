@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final String SECRET_KEY = "ContraseñaSuperSecreta123";
+    private final String SECRET_KEY = "supersecretpassword1234567891011121314";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -61,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Tu sesión ya expiró");
         }
         String role = JWT.decode(token).getClaim("role").asString();
-        if(!role.equals("Administrator")) {
+        if(!role.equals("ADMIN")) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Session error, no token");
             return;
         }
