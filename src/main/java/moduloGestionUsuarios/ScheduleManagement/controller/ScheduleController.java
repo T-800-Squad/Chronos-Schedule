@@ -70,7 +70,7 @@ public class ScheduleController {
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<List<Schedule>>> getSchedule(GetScheduleDTO getScheduleDTO) throws ScheduleManagementException {
+    public ResponseEntity<ApiResponse<List<Schedule>>> getSchedule(@RequestBody GetScheduleDTO getScheduleDTO) throws ScheduleManagementException {
         List<Schedule> horarios = scheduleService.getSchedule(getScheduleDTO);
 
         ApiResponse<List<Schedule>> response = new ApiResponse<>(
