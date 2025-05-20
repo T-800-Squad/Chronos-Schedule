@@ -1,5 +1,6 @@
 package moduloGestionUsuarios.ScheduleManagement.service;
 
+import moduloGestionUsuarios.ScheduleManagement.DTO.ConfigurationDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.IntervalDTO;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Interval;
@@ -90,23 +91,38 @@ public class ConfigurationService implements ConfigurationServiceInterface {
         configurationRepository.deleteById(id);
     }
 
-    public List<Configuration> getConfiguration() throws ScheduleManagementException {
+    public List<ConfigurationDTO> getConfiguration() throws ScheduleManagementException {
         List<Configuration> configs = configurationRepository.findAll();
+
         if (configs.isEmpty()) {
             throw new ScheduleManagementException(ScheduleManagementException.NO_CONFIGURATIONS_FOUND);
         }
-        return configs;
+        return convertConfigurationToDTO(configs);
     }
 
 
-    public List<Configuration> getConfigurationInInterval(IntervalDTO interval) throws ScheduleManagementException{
+
+
+    public List<ConfigurationDTO> getConfigurationInInterval(IntervalDTO interval) throws ScheduleManagementException{
         LocalTime startTime = LocalTime.parse(interval.getStartTime());
         LocalTime endTime = LocalTime.parse(interval.getEndTime());
         List<Configuration> configurations = configurationRepository.findAllByStartTimeAndEndTime(startTime,endTime);
         if(configurations.isEmpty()){
             throw new ScheduleManagementException(ScheduleManagementException.NOT_CONFIG_INTERVALS);
         }
-        return configurations;
+        return convertConfigurationToDTO(configurations);
+    }
+
+    private List<ConfigurationDTO> convertConfigurationToDTO(List<Configuration> configs) {
+        List<ConfigurationDTO> dtos = new ArrayList<>();
+        for (Configuration config : configs) {
+            ConfigurationDTO dto = new ConfigurationDTO();
+            dto.setName(config.getName());
+            dto.setStartTime(config.getStartTime().toString());
+            dto.setEndTime(config.getEndTime().toString());
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     @Override

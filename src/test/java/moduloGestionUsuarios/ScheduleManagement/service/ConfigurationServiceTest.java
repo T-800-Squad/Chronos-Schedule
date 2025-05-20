@@ -1,5 +1,6 @@
 package moduloGestionUsuarios.ScheduleManagement.service;
 
+import moduloGestionUsuarios.ScheduleManagement.DTO.ConfigurationDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.IntervalDTO;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Interval;
@@ -169,11 +170,15 @@ public class ConfigurationServiceTest {
     public void testGetConfigurationSuccess() {
         try {
             Configuration configuration = new Configuration();
+            configuration.setStartTime(LocalTime.parse("10:00"));
+            configuration.setEndTime(LocalTime.parse("12:00"));
             List<Configuration> configurations = Arrays.asList(configuration);
             Mockito.when(configurationRepository.findAll()).thenReturn(configurations);
-            List<Configuration> result = configurationService.getConfiguration();
+            List<ConfigurationDTO> result = configurationService.getConfiguration();
             assertNotNull(result);
             assertEquals(1, result.size());
+            assertEquals("10:00", result.get(0).getStartTime());
+            assertEquals("12:00", result.get(0).getEndTime());
         } catch (ScheduleManagementException e) {
             fail("Unexpected ScheduleManagementException: " + e.getMessage());
         }
@@ -204,6 +209,8 @@ public class ConfigurationServiceTest {
             Configuration configuration = new Configuration();
             List<Configuration>configurations= new ArrayList<>();
             configurations.add(configuration);
+            configuration.setStartTime(startTime);
+            configuration.setEndTime(endTime);
             Mockito.when(configurationRepository.findAllByStartTimeAndEndTime(startTime,endTime)).thenReturn(configurations);
             configurationService.getConfigurationInInterval(intervalDTO);
         }catch (ScheduleManagementException e){

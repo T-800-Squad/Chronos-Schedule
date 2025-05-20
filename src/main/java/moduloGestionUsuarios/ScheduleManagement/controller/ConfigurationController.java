@@ -1,5 +1,6 @@
 package moduloGestionUsuarios.ScheduleManagement.controller;
 
+import moduloGestionUsuarios.ScheduleManagement.DTO.ConfigurationDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.IntervalDTO;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Configuration;
@@ -44,10 +45,10 @@ public class ConfigurationController {
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<List<Configuration>>> getConfiguration() throws ScheduleManagementException {
-        List<Configuration> configuraciones = configurationService.getConfiguration();
+    public ResponseEntity<ApiResponse<List<ConfigurationDTO>>> getConfiguration() throws ScheduleManagementException {
+        List<ConfigurationDTO> configuraciones = configurationService.getConfiguration();
 
-        ApiResponse<List<Configuration>> response = new ApiResponse<>(
+        ApiResponse<List<ConfigurationDTO>> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Lista de configuraciones obtenida correctamente",
                 configuraciones
@@ -58,9 +59,9 @@ public class ConfigurationController {
 
 
     @GetMapping("/interval")
-    public ResponseEntity<ApiResponse<List<Configuration>>> getConfigurationInInterval(@RequestBody IntervalDTO interval) throws ScheduleManagementException {
-        List<Configuration> configurations = configurationService.getConfigurationInInterval(interval);
-        ApiResponse<List<Configuration>> response = new ApiResponse<>(
+    public ResponseEntity<ApiResponse<List<ConfigurationDTO>>> getConfigurationInInterval(@RequestBody IntervalDTO interval) throws ScheduleManagementException {
+        List<ConfigurationDTO> configurations = configurationService.getConfigurationInInterval(interval);
+        ApiResponse<List<ConfigurationDTO>> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Lista de configuraciones para el intervalo de " + interval.getStartTime() +" y " +interval.getEndTime(),
                 configurations

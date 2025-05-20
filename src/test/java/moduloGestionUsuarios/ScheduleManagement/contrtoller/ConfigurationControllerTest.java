@@ -1,5 +1,6 @@
 package moduloGestionUsuarios.ScheduleManagement.contrtoller;
 
+import moduloGestionUsuarios.ScheduleManagement.DTO.ConfigurationDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.IntervalDTO;
 import moduloGestionUsuarios.ScheduleManagement.controller.ConfigurationController;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
@@ -58,11 +59,11 @@ public class ConfigurationControllerTest {
     }
     @Test
     public void testGetConfigurationInInterval() throws Exception {
-        Configuration configuration = new Configuration();
+        ConfigurationDTO configuration = new ConfigurationDTO();
         configuration.setName("test");
-        configuration.setStartTime(LocalTime.parse("07:00"));
-        configuration.setEndTime(LocalTime.parse("08:00"));
-        List<Configuration> configurations = new ArrayList<>();
+        configuration.setStartTime("07:00");
+        configuration.setEndTime("08:00");
+        List<ConfigurationDTO> configurations = new ArrayList<>();
         configurations.add(configuration);
         Mockito.when(configurationService.getConfigurationInInterval(Mockito.any(IntervalDTO.class))).thenReturn(configurations);
         String jsonBody = """
