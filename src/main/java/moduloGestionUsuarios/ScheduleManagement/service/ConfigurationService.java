@@ -110,17 +110,6 @@ public class ConfigurationService implements ConfigurationServiceInterface {
 
 
 
-
-    public List<ConfigurationDTO> getConfigurationInInterval(IntervalDTO interval) throws ScheduleManagementException{
-        LocalTime startTime = LocalTime.parse(interval.getStartTime());
-        LocalTime endTime = LocalTime.parse(interval.getEndTime());
-        List<Configuration> configurations = configurationRepository.findAllByStartTimeAndEndTime(startTime,endTime);
-        if(configurations.isEmpty()){
-            throw new ScheduleManagementException(ScheduleManagementException.NOT_CONFIG_INTERVALS);
-        }
-        return convertConfigurationToDTO(configurations);
-    }
-
     private List<ConfigurationDTO> convertConfigurationToDTO(List<Configuration> configs) {
         List<ConfigurationDTO> dtos = new ArrayList<>();
         for (Configuration config : configs) {

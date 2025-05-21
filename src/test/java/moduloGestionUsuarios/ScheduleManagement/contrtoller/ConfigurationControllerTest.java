@@ -57,25 +57,7 @@ public class ConfigurationControllerTest {
             fail();
         }
     }
-    @Test
-    public void testGetConfigurationInInterval() throws Exception {
-        ConfigurationDTO configuration = new ConfigurationDTO();
-        configuration.setName("test");
-        configuration.setStartTime("07:00");
-        configuration.setEndTime("08:00");
-        List<ConfigurationDTO> configurations = new ArrayList<>();
-        configurations.add(configuration);
-        Mockito.when(configurationService.getConfigurationInInterval(Mockito.any(IntervalDTO.class))).thenReturn(configurations);
-        String jsonBody = """
-                {
-                "startTime": "07:00",
-                "endTime": "08:00"
-                }
-                """;
 
-        mockMvc.perform(get("/configuration/interval"))
-                .andExpect(status().isBadRequest());
-    }
 
     @Test
     public void testGetConfigurationByName() throws Exception {

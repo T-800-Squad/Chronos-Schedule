@@ -200,40 +200,7 @@ public class ConfigurationServiceTest {
             fail("Unexpected ScheduleManagementException: " + e.getMessage());
         }
     }
-    @Test
-    public void testGetConfigurationInIntervalsException() {
-        try{
-            IntervalDTO intervalDTO = new IntervalDTO();
-            intervalDTO.setEndTime("07:00");
-            intervalDTO.setStartTime("04:00");
-            LocalTime startTime = LocalTime.parse("04:00");
-            LocalTime endTime = LocalTime.parse("07:00");
-            List<Configuration>configurations= new ArrayList<>();
-            Mockito.when(configurationRepository.findAllByStartTimeAndEndTime(startTime,endTime)).thenReturn(configurations);
-            configurationService.getConfigurationInInterval(intervalDTO);
-        }catch (ScheduleManagementException e){
-            assertEquals(e.getMessage(),ScheduleManagementException.NOT_CONFIG_INTERVALS);
-        }
-    }
-    @Test
-    public void testGetConfigurationInIntervalsSuccess() {
-        try{
-            IntervalDTO intervalDTO = new IntervalDTO();
-            intervalDTO.setEndTime("07:00");
-            intervalDTO.setStartTime("04:00");
-            LocalTime startTime = LocalTime.parse("04:00");
-            LocalTime endTime = LocalTime.parse("07:00");
-            Configuration configuration = new Configuration();
-            List<Configuration>configurations= new ArrayList<>();
-            configurations.add(configuration);
-            configuration.setStartTime(startTime);
-            configuration.setEndTime(endTime);
-            Mockito.when(configurationRepository.findAllByStartTimeAndEndTime(startTime,endTime)).thenReturn(configurations);
-            configurationService.getConfigurationInInterval(intervalDTO);
-        }catch (ScheduleManagementException e){
-            fail();
-        }
-    }
+
     @Test
     public void testGetConfigurationByNameNotFound() {
         try{
