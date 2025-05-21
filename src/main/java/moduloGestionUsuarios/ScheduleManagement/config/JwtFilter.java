@@ -49,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/swagger-resources/**",
                 "/webjars/**",
                 "/schedule",
-                "configuration/id**"
+                "/configuration/id**"
         );
 
         // Si la ruta es una de las abiertas, continuar sin filtrar.
