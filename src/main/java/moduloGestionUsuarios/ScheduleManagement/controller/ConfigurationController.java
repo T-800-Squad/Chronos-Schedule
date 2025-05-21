@@ -59,7 +59,8 @@ public class ConfigurationController {
 
 
     @GetMapping("/interval")
-    public ResponseEntity<ApiResponse<List<ConfigurationDTO>>> getConfigurationInInterval(@RequestBody IntervalDTO interval) throws ScheduleManagementException {
+    public ResponseEntity<ApiResponse<List<ConfigurationDTO>>> getConfigurationInInterval(@RequestParam String startTime, @RequestParam String endTime) throws ScheduleManagementException {
+        IntervalDTO interval = new IntervalDTO();
         List<ConfigurationDTO> configurations = configurationService.getConfigurationInInterval(interval);
         ApiResponse<List<ConfigurationDTO>> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
