@@ -45,18 +45,33 @@ public class ConfigurationServiceTest {
     }
 
     @Test
+    public void testCreateConfigurationTimesCrossException() {
+        try{
+            Configuration configuration = new Configuration();
+            configuration.setName("test");
+            configuration.setStartTime(LocalTime.parse("10:00"));
+            configuration.setEndTime(LocalTime.parse("07:00"));
+            Mockito.when(configurationRepository.findByName("test")).thenReturn(Optional.empty());
+            configurationService.createConfiguration(configuration);
+        }catch (ScheduleManagementException e){
+            assertEquals(e.getMessage(),ScheduleManagementException.TIMES_CROSS);
+        }
+    }
+
+    @Test
     public void testCreateConfigurationIntervalsCross() {
         try{
             Configuration configuration = new Configuration();
             configuration.setName("test");
-
+            configuration.setStartTime(LocalTime.parse("07:00"));
+            configuration.setEndTime(LocalTime.parse("19:00"));
             //attention intervals configuration
             Interval attentionInterval = new Interval();
-            attentionInterval.setEndTime(LocalTime.parse("12:00"));
-            attentionInterval.setStartTime(LocalTime.parse("19:00"));
+            attentionInterval.setEndTime(LocalTime.parse("19:00"));
+            attentionInterval.setStartTime(LocalTime.parse("12:00"));
             Interval attentionInterval2 = new Interval();
-            attentionInterval2.setEndTime(LocalTime.parse("07:00"));
-            attentionInterval2.setStartTime(LocalTime.parse("13:00"));
+            attentionInterval2.setEndTime(LocalTime.parse("13:00"));
+            attentionInterval2.setStartTime(LocalTime.parse("07:00"));
             List<Interval> attentionIntervals = Arrays.asList(attentionInterval, attentionInterval2);
             configuration.setAttentionIntervals(attentionIntervals);
             configuration.setBreakIntervals(attentionIntervals);
@@ -73,15 +88,17 @@ public class ConfigurationServiceTest {
         try {
             Configuration configuration = new Configuration();
             configuration.setName("test");
+            configuration.setStartTime(LocalTime.parse("07:00"));
+            configuration.setEndTime(LocalTime.parse("19:00"));
             //attention intervals configuration
             Interval attentionInterval = new Interval();
-            attentionInterval.setEndTime(LocalTime.parse("11:00"));
-            attentionInterval.setStartTime(LocalTime.parse("19:00"));
+            attentionInterval.setEndTime(LocalTime.parse("19:00"));
+            attentionInterval.setStartTime(LocalTime.parse("11:00"));
             List<Interval> attentionIntervals = Arrays.asList(attentionInterval);
             //breaks intervals
             Interval interval = new Interval();
-            interval.setEndTime(LocalTime.parse("10:00"));
-            interval.setStartTime(LocalTime.parse("12:00"));
+            interval.setEndTime(LocalTime.parse("12:00"));
+            interval.setStartTime(LocalTime.parse("10:00"));
             List<Interval> intervals = Arrays.asList(interval);
             configuration.setAttentionIntervals(attentionIntervals);
             configuration.setBreakIntervals(intervals);
@@ -100,17 +117,17 @@ public class ConfigurationServiceTest {
             configuration.setName("test");
             //attention intervals configuration
             Interval attentionInterval = new Interval();
-            attentionInterval.setEndTime(LocalTime.parse("12:00"));
-            attentionInterval.setStartTime(LocalTime.parse("19:00"));
+            attentionInterval.setEndTime(LocalTime.parse("19:00"));
+            attentionInterval.setStartTime(LocalTime.parse("12:00"));
             Interval attentionInterval2 = new Interval();
-            attentionInterval2.setEndTime(LocalTime.parse("07:00"));
-            attentionInterval2.setStartTime(LocalTime.parse("10:00"));
+            attentionInterval2.setEndTime(LocalTime.parse("10:00"));
+            attentionInterval2.setStartTime(LocalTime.parse("07:00"));
             List<Interval> attentionIntervals = Arrays.asList(attentionInterval, attentionInterval2);
 
             //breaks intervals
             Interval interval = new Interval();
-            interval.setEndTime(LocalTime.parse("10:00"));
-            interval.setStartTime(LocalTime.parse("12:00"));
+            interval.setEndTime(LocalTime.parse("12:00"));
+            interval.setStartTime(LocalTime.parse("10:00"));
             List<Interval> intervals = Arrays.asList(interval);
 
             //configuration sets

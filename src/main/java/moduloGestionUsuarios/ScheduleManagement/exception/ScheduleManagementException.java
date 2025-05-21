@@ -4,6 +4,7 @@ public class ScheduleManagementException extends Exception {
 
     public static final String NAME_EXIST = "Una configuracion ya fue registrada con ese nombre";
     public static final String INTERVALS_CROSS = "Hay intervalos que se cruzan";
+    public static final String TIMES_CROSS = "Hay tiempos iniciales despues del tiempo final";
     public static final String CONFIG_NOT_FOUND = "No se encontró la configuración.";
     public static final String NO_CONFIGURATIONS_FOUND = "No hay configuraciones registradas.";
     public static final String SERVICE_NOT_FOUND = "No se encontró el servicio con el nombre proporcionado.";

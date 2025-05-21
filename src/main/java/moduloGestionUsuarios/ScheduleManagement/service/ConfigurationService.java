@@ -30,16 +30,19 @@ public class ConfigurationService implements ConfigurationServiceInterface {
         }
         List<Interval> attentionIntervals = configuration.getAttentionIntervals();
         List<Interval> breaksIntervals = configuration.getBreakIntervals();
+        validateTimes(configuration.getStartTime(),configuration.getEndTime());
         validateIntervals(attentionIntervals);
         validateIntervals(breaksIntervals);
         validateAttentionAndBreakIntervals(attentionIntervals, breaksIntervals);
         configurationRepository.save(configuration);
     }
 
+
     private void validateIntervals(List<Interval> attentionIntervals) throws ScheduleManagementException {
         int attentionSize = attentionIntervals.size();
         for(int i = 0; i<attentionSize; i++){
             validateIntervalsNotCross(attentionIntervals,i);
+            validateTimes(attentionIntervals.get(i).getStartTime(),attentionIntervals.get(i).getEndTime());
         }
     }
 
@@ -78,6 +81,11 @@ public class ConfigurationService implements ConfigurationServiceInterface {
         if((firstStartTime.isBefore(secondStartTime) && firstEndTime.isAfter(secondStartTime))||
                 (secondStartTime.isBefore(firstStartTime) && secondEndTime.isAfter(firstStartTime))){
             throw new ScheduleManagementException(ScheduleManagementException.INTERVALS_CROSS);
+        }
+    }
+    private void validateTimes(LocalTime startTime,LocalTime endTime) throws ScheduleManagementException {
+        if(startTime.isAfter(endTime)){
+            throw new ScheduleManagementException(ScheduleManagementException.TIMES_CROSS);
         }
     }
 
