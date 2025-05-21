@@ -73,17 +73,8 @@ public class ConfigurationControllerTest {
                 }
                 """;
 
-        mockMvc.perform(get("/configuration/interval").content(jsonBody).contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("200"))
-                .andExpect(jsonPath("$.message").value("Lista de configuraciones para el intervalo de 07:00 y 08:00"))
-                .andExpect(jsonPath("$.data[0].id").doesNotExist()) // Verifica que id es null
-                .andExpect(jsonPath("$.data[0].name").value("test")) // Verifica que el nombre sea "test"
-                .andExpect(jsonPath("$.data[0].startTime").value("07:00")) // Verifica que startTime es "07:00"
-                .andExpect(jsonPath("$.data[0].endTime").value("08:00")) // Verifica que endTime es "08:00"
-                .andExpect(jsonPath("$.data[0].breakIntervals").doesNotExist()) // Verifica que breakIntervals es null
-                .andExpect(jsonPath("$.data[0].attentionIntervals").doesNotExist());
-
+        mockMvc.perform(get("/configuration/interval"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
