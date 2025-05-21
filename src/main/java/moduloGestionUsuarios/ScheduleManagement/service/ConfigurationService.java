@@ -89,10 +89,13 @@ public class ConfigurationService implements ConfigurationServiceInterface {
         }
     }
 
-    public void deleteConfiguration(String id) throws ScheduleManagementException {
-        if (!configurationRepository.existsById(id)) {
+    public void deleteConfiguration(String name) throws ScheduleManagementException {
+        Optional<Configuration> configuration = configurationRepository.findByName(name);
+        if (configuration.isEmpty()) {
             throw new ScheduleManagementException(ScheduleManagementException.CONFIG_NOT_FOUND);
         }
+        Configuration config = configuration.get();
+        String id = config.getId();
         if(!scheduleRepository.findAllByIdConfiguration(id).isEmpty()){
             throw new ScheduleManagementException(ScheduleManagementException.CONFIG_IN_SCHEDULE);
         }

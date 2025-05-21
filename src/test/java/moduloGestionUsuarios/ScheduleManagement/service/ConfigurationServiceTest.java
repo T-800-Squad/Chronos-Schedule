@@ -160,13 +160,16 @@ public class ConfigurationServiceTest {
     @Test
     public void testDeleteConfigurationSuccess() {
         try {
-            String id = "12345";
-            Mockito.when(configurationRepository.existsById(id)).thenReturn(true);
-            Mockito.doNothing().when(configurationRepository).deleteById(id);
+            String name = "12345";
+            Configuration configuration = new Configuration();
+            configuration.setName(name);
+            configuration.setId(name);
+            Mockito.when(configurationRepository.findByName(name)).thenReturn(Optional.of(configuration));
+            Mockito.doNothing().when(configurationRepository).deleteById(name);
             List<Schedule> schedules = new ArrayList<>();
             Mockito.when(scheduleRepository.findAllByIdConfiguration("12345")).thenReturn(schedules);
-            configurationService.deleteConfiguration(id);
-            Mockito.verify(configurationRepository).deleteById(id);
+            configurationService.deleteConfiguration(name);
+            Mockito.verify(configurationRepository).deleteById(name);
         } catch (ScheduleManagementException e) {
             fail("Unexpected ScheduleManagementException: " + e.getMessage());
         }

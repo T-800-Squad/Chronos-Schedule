@@ -33,8 +33,8 @@ public class ConfigurationController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<ApiResponse<String>> deleteConfiguration(@RequestParam String id) throws ScheduleManagementException {
-        configurationService.deleteConfiguration(id);
+    public ResponseEntity<ApiResponse<String>> deleteConfiguration(@RequestParam String name) throws ScheduleManagementException {
+        configurationService.deleteConfiguration(name);
 
         ApiResponse<String> response = new ApiResponse<>(
                 HttpStatus.CREATED.value(),

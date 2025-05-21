@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface ConfigurationRepository extends MongoRepository<Configuration, String> {
     Optional<Configuration> findByName(String name);
+    Boolean existsByName(String name);
     List<Configuration> findAllByName(String name);
     List<Configuration> findAllByStartTimeAndEndTime(LocalTime startTime,LocalTime endTime);
 }
