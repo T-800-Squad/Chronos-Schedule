@@ -79,12 +79,12 @@ public class ConfigurationService implements ConfigurationServiceInterface {
 
     private void validateIntervalsNotCross(LocalTime firstStartTime, LocalTime secondStartTime, LocalTime firstEndTime, LocalTime secondEndTime) throws ScheduleManagementException {
         if((firstStartTime.isBefore(secondStartTime) && firstEndTime.isAfter(secondStartTime))||
-                (secondStartTime.isBefore(firstStartTime) && secondEndTime.isAfter(firstStartTime))){
+                (secondStartTime.isBefore(firstStartTime) && secondEndTime.isAfter(firstStartTime))||(firstStartTime.equals(secondStartTime))){
             throw new ScheduleManagementException(ScheduleManagementException.INTERVALS_CROSS);
         }
     }
     private void validateTimes(LocalTime startTime,LocalTime endTime) throws ScheduleManagementException {
-        if(startTime.isAfter(endTime)){
+        if(startTime.isAfter(endTime) || startTime.equals(endTime)){
             throw new ScheduleManagementException(ScheduleManagementException.TIMES_CROSS);
         }
     }
