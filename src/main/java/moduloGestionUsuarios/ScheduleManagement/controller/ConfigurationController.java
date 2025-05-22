@@ -37,7 +37,7 @@ public class ConfigurationController {
         configurationService.deleteConfiguration(name);
 
         ApiResponse<String> response = new ApiResponse<>(
-                HttpStatus.CREATED.value(),
+                HttpStatus.OK.value(),
                 "La configuracion fue eliminada",
                 null
         );
