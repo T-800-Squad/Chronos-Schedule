@@ -1,6 +1,6 @@
 package moduloGestionUsuarios.ScheduleManagement.service;
 
-import moduloGestionUsuarios.ScheduleManagement.DTO.AddConfigurationDTO;
+
 import moduloGestionUsuarios.ScheduleManagement.DTO.AddServiceDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.GetScheduleDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.UpdateServiceDTO;
@@ -62,43 +62,6 @@ public class ScheduleServiceTest {
         }
     }
 
-    @Test
-    public void testAddConfigurationToScheduleNotFound() {
-        AddConfigurationDTO dto = new AddConfigurationDTO();
-        dto.setDayOfWeek("Monday");
-        dto.setServiceName("Cleaning");
-
-        Mockito.when(scheduleRepository.findByDayOfWeekAndServiceSpaceType("Monday", "Cleaning")).thenReturn(null);
-
-        try {
-            scheduleService.addConfigurationToSchedule(dto);
-            fail("Expected ScheduleManagementException was not thrown.");
-        } catch (ScheduleManagementException e) {
-            assertEquals(ScheduleManagementException.SCHEDULE_NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @Test
-    public void testAddConfigurationToScheduleSuccess() {
-        AddConfigurationDTO dto = new AddConfigurationDTO();
-        dto.setDayOfWeek("Monday");
-        dto.setServiceName("Cleaning");
-        dto.setConfigurationId("config123");
-
-        Schedule schedule = new Schedule();
-        schedule.setDayOfWeek("Monday");
-        schedule.setServiceSpaceType("Cleaning");
-
-        Mockito.when(scheduleRepository.findByDayOfWeekAndServiceSpaceType("Monday", "Cleaning")).thenReturn(schedule);
-        Mockito.when(scheduleRepository.save(schedule)).thenReturn(schedule);
-
-        try {
-            scheduleService.addConfigurationToSchedule(dto);
-            assertEquals("config123", schedule.getIdConfiguration());
-        } catch (ScheduleManagementException e) {
-            fail("Unexpected ScheduleManagementException: " + e.getMessage());
-        }
-    }
 
     @Test
     public void testGetScheduleNotFound() {

@@ -16,8 +16,6 @@ public interface ConfigurationServiceInterface {
 
     List<ConfigurationDTO> getConfiguration() throws ScheduleManagementException;
 
-
-
     Configuration getConfigurationByName(@RequestParam String name) throws ScheduleManagementException;
 
     Configuration getConfigurationById(@RequestParam String id) throws ScheduleManagementException;

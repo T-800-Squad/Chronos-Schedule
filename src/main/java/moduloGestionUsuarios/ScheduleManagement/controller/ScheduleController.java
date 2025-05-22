@@ -1,6 +1,5 @@
 package moduloGestionUsuarios.ScheduleManagement.controller;
 
-import moduloGestionUsuarios.ScheduleManagement.DTO.AddConfigurationDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.AddServiceDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.GetScheduleDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.UpdateServiceDTO;
@@ -57,18 +56,6 @@ public class ScheduleController {
 
     }
 
-    @PostMapping("/configuration")
-    public ResponseEntity<ApiResponse<String>> addConfigurationToSchedule(@RequestBody AddConfigurationDTO addConfigurationDTO) throws ScheduleManagementException {
-        scheduleService.addConfigurationToSchedule(addConfigurationDTO);
-
-        ApiResponse<String> response = new ApiResponse<>(
-                HttpStatus.CREATED.value(),
-                "Configuración agregada al horario correctamente",
-                null
-        );
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
-
     @GetMapping()
     public ResponseEntity<ApiResponse<List<Schedule>>> getSchedule(@RequestParam String serviceName, @RequestParam String dayOfWeek) throws ScheduleManagementException {
         GetScheduleDTO getScheduleDTO = new GetScheduleDTO();
@@ -80,6 +67,16 @@ public class ScheduleController {
                 HttpStatus.OK.value(),
                 "Lista de horarios obtenida correctamente",
                 horarios
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/service")
+    public ResponseEntity<ApiResponse<List<String>>> getService()throws ScheduleManagementException {
+        List<String> services = scheduleService.getServicesNames();
+        ApiResponse<List<String>> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Lista de nombres de servicios registrados en el sistemas",
+                services
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

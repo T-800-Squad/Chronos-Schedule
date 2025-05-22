@@ -1,6 +1,6 @@
 package moduloGestionUsuarios.ScheduleManagement.service;
 
-import moduloGestionUsuarios.ScheduleManagement.DTO.AddConfigurationDTO;
+
 import moduloGestionUsuarios.ScheduleManagement.DTO.AddServiceDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.GetScheduleDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.UpdateServiceDTO;
@@ -10,9 +10,9 @@ import moduloGestionUsuarios.ScheduleManagement.repository.ConfigurationReposito
 import moduloGestionUsuarios.ScheduleManagement.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
+import java.util.*;
 
 @Service
 public class ScheduleService implements ScheduleServiceInterface {
@@ -63,20 +63,20 @@ public class ScheduleService implements ScheduleServiceInterface {
         scheduleRepository.save(schedule);
     }
 
-    public void addConfigurationToSchedule(AddConfigurationDTO addConfigurationDTO) throws ScheduleManagementException {
-        Schedule schedule = scheduleRepository.findByDayOfWeekAndServiceSpaceType(addConfigurationDTO.getDayOfWeek(), addConfigurationDTO.getServiceName());
-        if (schedule == null) {
-            throw new ScheduleManagementException(ScheduleManagementException.SCHEDULE_NOT_FOUND);
-        }
-        schedule.setIdConfiguration(addConfigurationDTO.getConfigurationId());
-        scheduleRepository.save(schedule);
-    }
-
     public List<Schedule> getSchedule(GetScheduleDTO getScheduleDTO) throws ScheduleManagementException {
         List<Schedule> schedules = scheduleRepository.findAllByDayOfWeekAndServiceSpaceType(getScheduleDTO.getDayOfWeek(), getScheduleDTO.getServiceName());
         if (schedules.isEmpty()) {
             throw new ScheduleManagementException(ScheduleManagementException.SCHEDULE_NOT_FOUND);
         }
         return schedules;
+    }
+
+    public List<String> getServicesNames() throws ScheduleManagementException {
+        List<Schedule> schedules = scheduleRepository.findAll();
+        Set<String> services = new HashSet<>();
+        for (Schedule schedule : schedules) {
+            services.add(schedule.getServiceSpaceType());
+        }
+        return new ArrayList<>(services);
     }
 }
