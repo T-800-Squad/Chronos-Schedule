@@ -36,8 +36,7 @@ public class ConfigurationServiceTest {
         try{
             Configuration configuration = new Configuration();
             configuration.setName("test");
-            Optional<Configuration> option = Optional.of(configuration);
-            Mockito.when(configurationRepository.findByName("test")).thenReturn(option);
+            Mockito.when(configurationRepository.existsByName("test")).thenReturn(true);
             configurationService.createConfiguration(configuration);
         }catch (ScheduleManagementException e){
             assertEquals(e.getMessage(),ScheduleManagementException.NAME_EXIST);

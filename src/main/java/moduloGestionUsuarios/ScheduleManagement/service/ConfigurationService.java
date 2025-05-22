@@ -25,7 +25,7 @@ public class ConfigurationService implements ConfigurationServiceInterface {
     private ScheduleRepository scheduleRepository;
 
     public void createConfiguration(Configuration configuration) throws ScheduleManagementException {
-        if(configurationRepository.findByName(configuration.getName()).isPresent()){
+        if(configurationRepository.existsByName(configuration.getName())){
             throw new ScheduleManagementException(ScheduleManagementException.NAME_EXIST);
         }
         List<Interval> attentionIntervals = configuration.getAttentionIntervals();
