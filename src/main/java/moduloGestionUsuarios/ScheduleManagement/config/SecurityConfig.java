@@ -1,4 +1,8 @@
 package moduloGestionUsuarios.ScheduleManagement.config;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +23,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Also provides a bean for password encoding using BCrypt.
  */
 @Configuration
+@OpenAPIDefinition(
+        info = @Info(
+                title = "SCHEDULE MANAGEMENT",
+                version = "1.0.0",
+                description = "Documentacion de una api para la gestion de horarios de diferentes tipos de servicios"
+
+        )
+)
 public class SecurityConfig {
 
     /**

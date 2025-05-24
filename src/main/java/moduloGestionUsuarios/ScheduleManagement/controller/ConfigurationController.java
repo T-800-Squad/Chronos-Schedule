@@ -1,10 +1,13 @@
 package moduloGestionUsuarios.ScheduleManagement.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import moduloGestionUsuarios.ScheduleManagement.DTO.ConfigurationDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.IntervalDTO;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
 import moduloGestionUsuarios.ScheduleManagement.model.Configuration;
-import moduloGestionUsuarios.ScheduleManagement.response.ApiResponse;
+import moduloGestionUsuarios.ScheduleManagement.response.Response;
 import moduloGestionUsuarios.ScheduleManagement.service.ConfigurationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,11 +23,17 @@ public class ConfigurationController {
     @Autowired
     private ConfigurationServiceInterface configurationService;
 
+    @Operation(summary = "Creacion de una configuracion", description = "Crea una configuracion.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Se creo la configuracion."),
+            @ApiResponse(responseCode = "401", description = "No tiene permisos"),
+            @ApiResponse(responseCode = "400", description = "La configuracion no se creo")
+    })
     @PostMapping()
-    public ResponseEntity<ApiResponse<String>> createConfiguration(@RequestBody Configuration configuration) throws ScheduleManagementException {
+    public ResponseEntity<Response<String>> createConfiguration(@RequestBody Configuration configuration) throws ScheduleManagementException {
         configurationService.createConfiguration(configuration);
 
-        ApiResponse<String> response = new ApiResponse<>(
+        Response<String> response = new Response<>(
                 HttpStatus.CREATED.value(),
                 "La configuracion fue creada",
                 null
@@ -33,10 +42,10 @@ public class ConfigurationController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<ApiResponse<String>> deleteConfiguration(@RequestParam String name) throws ScheduleManagementException {
+    public ResponseEntity<Response<String>> deleteConfiguration(@RequestParam String name) throws ScheduleManagementException {
         configurationService.deleteConfiguration(name);
 
-        ApiResponse<String> response = new ApiResponse<>(
+        Response<String> response = new Response<>(
                 HttpStatus.OK.value(),
                 "La configuracion fue eliminada",
                 null
@@ -45,10 +54,10 @@ public class ConfigurationController {
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<List<ConfigurationDTO>>> getConfiguration() throws ScheduleManagementException {
+    public ResponseEntity<Response<List<ConfigurationDTO>>> getConfiguration() throws ScheduleManagementException {
         List<ConfigurationDTO> configuraciones = configurationService.getConfiguration();
 
-        ApiResponse<List<ConfigurationDTO>> response = new ApiResponse<>(
+        Response<List<ConfigurationDTO>> response = new Response<>(
                 HttpStatus.OK.value(),
                 "Lista de configuraciones obtenida correctamente",
                 configuraciones
@@ -61,9 +70,9 @@ public class ConfigurationController {
 
 
     @GetMapping("/name")
-    public ResponseEntity<ApiResponse<Configuration>> getConfigurationByName(@RequestParam String name) throws ScheduleManagementException {
+    public ResponseEntity<Response<Configuration>> getConfigurationByName(@RequestParam String name) throws ScheduleManagementException {
         Configuration configuration = configurationService.getConfigurationByName(name);
-        ApiResponse<Configuration> response = new ApiResponse<>(
+        Response<Configuration> response = new Response<>(
                 HttpStatus.OK.value(),
                 "Configuracion encontrada",
                 configuration
@@ -72,9 +81,9 @@ public class ConfigurationController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<ApiResponse<Configuration>> getConfigurationById(@RequestParam String id) throws ScheduleManagementException {
+    public ResponseEntity<Response<Configuration>> getConfigurationById(@RequestParam String id) throws ScheduleManagementException {
         Configuration configuration = configurationService.getConfigurationById(id);
-        ApiResponse<Configuration> response = new ApiResponse<>(
+        Response<Configuration> response = new Response<>(
                 HttpStatus.OK.value(),
                 "Configuracion encontrada",
                 configuration

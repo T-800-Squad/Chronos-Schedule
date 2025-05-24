@@ -5,6 +5,7 @@ import moduloGestionUsuarios.ScheduleManagement.DTO.AddServiceDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.GetScheduleDTO;
 import moduloGestionUsuarios.ScheduleManagement.DTO.UpdateServiceDTO;
 import moduloGestionUsuarios.ScheduleManagement.exception.ScheduleManagementException;
+import moduloGestionUsuarios.ScheduleManagement.model.Configuration;
 import moduloGestionUsuarios.ScheduleManagement.model.Schedule;
 import moduloGestionUsuarios.ScheduleManagement.repository.ConfigurationRepository;
 import moduloGestionUsuarios.ScheduleManagement.repository.ScheduleRepository;
@@ -54,12 +55,13 @@ public class ScheduleService implements ScheduleServiceInterface {
         if(!scheduleRepository.existsByServiceSpaceType(updateServiceDTO.getServiceName())){
             throw new ScheduleManagementException(ScheduleManagementException.SERVICE_NOT_FOUND);
         }
-        if(!configurationRepository.existsById(updateServiceDTO.getConfigurationId())){
+        if(!configurationRepository.existsByName(updateServiceDTO.getConfigurationName())){
             throw new ScheduleManagementException(ScheduleManagementException.CONFIG_NOT_FOUND);
         }
         Schedule schedule = scheduleRepository.findByDayOfWeekAndServiceSpaceType(updateServiceDTO.getDayOfWeek(), updateServiceDTO.getServiceName());
+        Optional<Configuration> configuration = configurationRepository.findByName(updateServiceDTO.getConfigurationName());
         schedule.setResponsibleUser(updateServiceDTO.getResponsibleUser());
-        schedule.setIdConfiguration(updateServiceDTO.getConfigurationId());
+        schedule.setIdConfiguration(configuration.get().getId());
         scheduleRepository.save(schedule);
     }
 

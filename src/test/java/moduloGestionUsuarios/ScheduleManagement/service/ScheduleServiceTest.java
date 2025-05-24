@@ -147,7 +147,7 @@ public class ScheduleServiceTest {
             dto.setServiceName("Cleaning");
             dto.setResponsibleUser("admin");
             Mockito.when(scheduleRepository.existsByServiceSpaceType("Cleaning")).thenReturn(true);
-            Mockito.when(configurationRepository.existsById(dto.getConfigurationId())).thenReturn(false);
+            Mockito.when(configurationRepository.existsByName(dto.getConfigurationName())).thenReturn(false);
             scheduleService.updateServiceSchedule(dto);
         }catch(ScheduleManagementException e){
             assertEquals("No se encontró la configuración.", e.getMessage());
@@ -159,14 +159,17 @@ public class ScheduleServiceTest {
             UpdateServiceDTO dto = new UpdateServiceDTO();
             dto.setServiceName("Cleaning");
             dto.setResponsibleUser("admin");
-            dto.setConfigurationId("config123");
+            dto.setConfigurationName("config123");
             dto.setDayOfWeek("Monday");
             Schedule schedule = new Schedule();
             schedule.setDayOfWeek("Monday");
             schedule.setServiceSpaceType("Cleaning");
             schedule.setIdConfiguration("config12");
             schedule.setResponsibleUser("x");
-            Mockito.when(configurationRepository.existsById(dto.getConfigurationId())).thenReturn(true);
+            Configuration configuration = new Configuration();
+            configuration.setId("config123");
+            Mockito.when(configurationRepository.findByName(dto.getConfigurationName())).thenReturn(Optional.of(configuration));
+            Mockito.when(configurationRepository.existsByName(dto.getConfigurationName())).thenReturn(true);
             Mockito.when(scheduleRepository.existsByServiceSpaceType("Cleaning")).thenReturn(true);
             Mockito.when(scheduleRepository.findByDayOfWeekAndServiceSpaceType("Monday", "Cleaning")).thenReturn(schedule);
             Mockito.when(scheduleRepository.save(schedule)).thenReturn(schedule);

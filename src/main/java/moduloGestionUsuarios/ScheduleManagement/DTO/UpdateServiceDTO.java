@@ -4,7 +4,7 @@ public class UpdateServiceDTO {
     private String serviceName;
     private String dayOfWeek;
     private String responsibleUser;
-    private String configurationId;
+    private String configurationName;
 
     public String getServiceName() {
         return serviceName;
@@ -24,11 +24,11 @@ public class UpdateServiceDTO {
     public void setResponsibleUser(String responsibleUser) {
         this.responsibleUser = responsibleUser;
     }
-    public String getConfigurationId() {
-        return configurationId;
+    public String getConfigurationName() {
+        return configurationName;
     }
-    public void setConfigurationId(String configurationId) {
-        this.configurationId = configurationId;
+    public void setConfigurationName(String configurationId) {
+        this.configurationName = configurationId;
     }
 }
 
