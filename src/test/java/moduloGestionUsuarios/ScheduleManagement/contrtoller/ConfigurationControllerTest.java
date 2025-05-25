@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,6 +70,16 @@ public class ConfigurationControllerTest {
                 .andExpect(jsonPath("$.message").value("Configuracion encontrada"))
                 .andExpect(jsonPath("$.data.name").value("test"));
     }
+
+    @Test
+    public void testDeleteConfiguration() throws Exception {
+        Mockito.doNothing().when(configurationService).deleteConfiguration(Mockito.anyString());
+        mockMvc.perform(delete("/configuration").param("name", "test"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("200"))
+                .andExpect(jsonPath("$.message").value("La configuracion fue eliminada"));
+    }
+
 
 }
 

@@ -50,7 +50,7 @@ public class ConfigurationController {
                 "La configuracion fue eliminada",
                 null
         );
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping()
